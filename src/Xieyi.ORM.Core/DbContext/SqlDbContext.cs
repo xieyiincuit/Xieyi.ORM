@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using Xieyi.ORM.Core.Attributes;
 using Xieyi.ORM.Core.ConnectionManagement;
+using Xieyi.ORM.Core.Helper;
 using Xieyi.ORM.Core.QueryEngine;
 using Xieyi.ORM.Core.SqlDataAccess;
 using Xieyi.ORM.Core.SqlStatementManagement;
@@ -31,6 +32,16 @@ namespace Xieyi.ORM.Core.DbContext
         /// 查询执行器
         /// </summary>
         internal QueryExecutor QueryExecutor { get; private set; }
+        
+        internal override string GetQueryCacheKey()
+        {
+            //如果有条件，则sql的key要拼接对应的参数值
+            if (Parameters != null && Parameters.Any())
+            {
+                return MD5Helper.GetMd5Hash($"{SqlStatement}_{string.Join("|", Parameters.Values)}");
+            }
+            return MD5Helper.GetMd5Hash(SqlStatement);
+        }
 
         #region 数据库属性、参数、查询、命令、连接管理
 
@@ -84,7 +95,7 @@ namespace Xieyi.ORM.Core.DbContext
         /// <summary>
         /// 数据库连接管理器
         /// </summary>
-        internal DbConnection DbConnection { get; private set; }
+        protected DbConnection DbConnection { get; private set; }
 
         /// <summary>
         /// 创建连接管理器

@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Xieyi.ORM.Core\Xieyi.ORM.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MySql.Data" Version="8.2.0" />
+    </ItemGroup>
+
 </Project>

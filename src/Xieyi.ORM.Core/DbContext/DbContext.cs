@@ -22,7 +22,7 @@ namespace Xieyi.ORM.Core.DbContext
         /// <summary>
         /// 库名（对应SQL数据库的库名）
         /// </summary>
-        public string DataBaseName { get; internal set; }
+        public string DataBaseName { get; protected set; }
 
         /// <summary>
         /// 集合名（对应SQL数据库的表，MongoDB的文档名）
@@ -171,7 +171,7 @@ namespace Xieyi.ORM.Core.DbContext
 
         public abstract void Add<TEntity>(TEntity entity) where TEntity : class;
         public abstract Task AddAsync<TEntity>(TEntity entity) where TEntity : class;
-        
+
         public abstract void Update<TEntity>(Expression<Func<TEntity, bool>> filter, TEntity entity) where TEntity : class;
         public abstract Task UpdateAsync<TEntity>(Expression<Func<TEntity, bool>> filter, TEntity entity) where TEntity : class;
 
