@@ -37,11 +37,10 @@ namespace Xieyi.ORM.MySQL
 
         internal override void ParameterInitializes()
         {
-            if (this.Parameters != null && this.Parameters.Any())
-            {
-                DbCommand.Parameters.Clear();
-                Parameters.Foreach(t => DbCommand.Parameters.Add(new MySqlParameter(t.Key, t.Value ?? DBNull.Value)));
-            }
+            if (this.Parameters == null || !this.Parameters.Any()) return;
+            
+            DbCommand.Parameters.Clear();
+            Parameters.Foreach(t => DbCommand.Parameters.Add(new MySqlParameter(t.Key, t.Value ?? DBNull.Value)));
         }
 
         internal override List<TEntity> GetFullCollectionData<TEntity>()
