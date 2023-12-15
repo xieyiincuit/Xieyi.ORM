@@ -3,6 +3,8 @@
 //需要扩展的类型需要在此添加对应的程序集友元标识
 [assembly: InternalsVisibleTo("Xieyi.ORM.Cache")]
 [assembly: InternalsVisibleTo("Xieyi.ORM.MySQL")]
+[assembly: InternalsVisibleTo("Xieyi.ORM.Validation")]
+[assembly: InternalsVisibleTo("Xieyi.ORM.MongoDb")]
 namespace Xieyi.ORM.Core
 {
     /// <summary>
