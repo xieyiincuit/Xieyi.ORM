@@ -1,9 +1,8 @@
-using Xieyi.ORM.Cache.Options;
 using Xieyi.ORM.Core.DbContext;
 
 namespace Xieyi.ORM.Cache
 {
-    internal abstract class CacheManagerBase
+    public abstract class CacheManagerBase
     {
         protected CacheManagerBase(DbContext context, CacheOptions cacheOptions)
         {

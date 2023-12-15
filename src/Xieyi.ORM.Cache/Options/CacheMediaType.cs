@@ -1,4 +1,4 @@
-﻿namespace Xieyi.ORM.Cache.Options
+﻿namespace Xieyi.ORM.Cache
 {
     public enum CacheMediaType
     {

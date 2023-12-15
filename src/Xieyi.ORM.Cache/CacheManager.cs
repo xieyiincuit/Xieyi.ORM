@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Xieyi.ORM.Cache.Options;
 
 namespace Xieyi.ORM.Cache
 {
