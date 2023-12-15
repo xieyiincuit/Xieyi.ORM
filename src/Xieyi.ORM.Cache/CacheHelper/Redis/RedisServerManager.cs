@@ -1,18 +1,17 @@
 ﻿using StackExchange.Redis;
 
-namespace Xieyi.ORM.Cache
-{
-    internal abstract class RedisServerManager
-    {
-        protected ConnectionMultiplexer Redis { get; set; }
-        protected IDatabase Db { get; set; }
-        private string KeySpace { get; set; }
+namespace Xieyi.ORM.Cache;
 
-        protected RedisServerManager(string keySpace, string server)
-        {
-            KeySpace = keySpace;
-            Redis = ConnectionMultiplexer.Connect(server);
-            Db = Redis.GetDatabase();
-        }
+internal abstract class RedisServerManager
+{
+    protected ConnectionMultiplexer Redis { get; set; }
+    protected IDatabase Db { get; set; }
+    private string KeySpace { get; set; }
+
+    protected RedisServerManager(string keySpace, string server)
+    {
+        KeySpace = keySpace;
+        Redis = ConnectionMultiplexer.Connect(server);
+        Db = Redis.GetDatabase();
     }
 }

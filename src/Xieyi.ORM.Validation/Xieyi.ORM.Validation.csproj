@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Xieyi.ORM.Core\Xieyi.ORM.Core.csproj" />
+        <ProjectReference Include="..\Xieyi.ORM.Core\Xieyi.ORM.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+        <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0"/>
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-namespace Xieyi.ORM.Core
+namespace Xieyi.ORM.Core;
+
+public interface ICacheable
 {
-    public interface ICacheable { }
 }

@@ -1,8 +1,7 @@
-namespace Xieyi.ORM.Core.ConnectionManagement
+namespace Xieyi.ORM.Core.ConnectionManagement;
+
+public enum LoadBalanceStrategy
 {
-    public enum LoadBalanceStrategy
-    {
-        RoundRobin,
-        LeastConnection
-    }
+    RoundRobin,
+    LeastConnection
 }

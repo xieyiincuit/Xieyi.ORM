@@ -18,7 +18,7 @@ internal abstract class SqlQueryableBase<TEntity> where TEntity : class
     public IDictionary<string, object> Parameters => _dbContext.Parameters;
 
     protected Expression<Func<TEntity, bool>> _where = t => true;
-    
+
     protected Expression<Func<TEntity, object>> _orderby;
     protected bool _isDesc = false;
 

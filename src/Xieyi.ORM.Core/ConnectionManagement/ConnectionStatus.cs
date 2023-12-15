@@ -1,9 +1,8 @@
-﻿namespace Xieyi.ORM.Core.ConnectionManagement
+﻿namespace Xieyi.ORM.Core.ConnectionManagement;
+
+internal class ConnectionStatus
 {
-    internal class ConnectionStatus
-    {
-        public int HashKey { get; set; }
-        public string ConnectionString { get; set; }
-        public int Count { get; set; }
-    }
+    public int HashKey { get; set; }
+    public string ConnectionString { get; set; }
+    public int Count { get; set; }
 }

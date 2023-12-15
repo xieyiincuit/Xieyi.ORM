@@ -24,7 +24,7 @@ public abstract class CommandTextGeneratorBase
     protected string _limit;
 
     //Cache properties by type
-    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _propertiesDic = new ConcurrentDictionary<Type, PropertyInfo[]>();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _propertiesDic = new();
 
     protected static PropertyInfo[] GetPropertiesDicByType(Type type)
     {
