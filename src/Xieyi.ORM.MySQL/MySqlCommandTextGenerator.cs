@@ -135,7 +135,82 @@ public class MySqlCommandTextGenerator : CommandTextGeneratorBase
 
     public override string Update<TEntity>(TEntity entity, out Expression<Func<TEntity, bool>> filter)
     {
-        throw new NotImplementedException();
+        SqlDbContext.Parameters = new Dictionary<string, object>();
+        SqlDbContext.TableName = TableAttribute.GetName(typeof(TEntity));
+        PropertyInfo[] propertyInfos = GetPropertiesDicByType(typeof(TEntity));
+
+        //查找Entity的主键以及主键对应的值，如果用该方法更新数据，主键是必须存在的
+        var keyProperty = propertyInfos.FirstOrDefault(t => t.GetCustomAttribute(typeof(KeyAttribute), true) is KeyAttribute);
+        if (keyProperty == null)
+            throw new TableKeyNotFoundException($"table '{SqlDbContext.TableName}' not found primary key column");
+
+        var keyName = keyProperty.Name;
+        var keyValue = keyProperty.GetValue(entity);
+
+        if (keyProperty.GetCustomAttribute(typeof(ColumnAttribute), true) is ColumnAttribute columnAttr)
+            keyName = columnAttr.GetName(keyProperty.Name);
+
+        //Generate Expression of update via key : t => t.Key == value
+        ParameterExpression param = Expression.Parameter(typeof(TEntity), "t");
+        MemberExpression left = Expression.Property(param, keyProperty);
+        ConstantExpression right = Expression.Constant(keyValue);
+        BinaryExpression where = Expression.Equal(left, right);
+
+        filter = Expression.Lambda<Func<TEntity, bool>>(where, param);
+
+        //将主键的查询参数加到字典中
+        SqlDbContext.Parameters.AddOrUpdate($"@t{keyName}", keyValue);
+
+        //开始构造赋值的sql语句
+        StringBuilder builder_front = new StringBuilder();
+        builder_front.Append("UPDATE ");
+
+        //Mysql和sqlserver的分别处理
+        if (SqlDbContext.DataBaseType == DataBaseType.MySql)
+        {
+            builder_front.Append(SqlDbContext.TableName);
+            builder_front.Append(" ");
+        }
+
+        //查询语句中表的别名，例如“t”
+        string alias = filter.Parameters[0].Name;
+        builder_front.Append(alias);
+        builder_front.Append(" SET ");
+
+        foreach (PropertyInfo propertyInfo in propertyInfos)
+        {
+            if (propertyInfo.GetCustomAttribute(typeof(AutoIncreaseAttribute), true) is AutoIncreaseAttribute)
+            {
+            }
+            else if (propertyInfo.GetCustomAttribute(typeof(ColumnAttribute), true) is ColumnAttribute columnAttr1)
+            {
+                builder_front.Append(columnAttr1.GetName(propertyInfo.Name));
+                builder_front.Append("=");
+                builder_front.Append($"@{alias}");
+                var columnName = columnAttr1.GetName(propertyInfo.Name).Replace("`", "");
+                builder_front.Append(columnName);
+                builder_front.Append(",");
+
+                SqlDbContext.Parameters.AddOrUpdate($"@{alias}{columnName}", propertyInfo.GetValue(entity));
+            }
+
+            //in the end,remove the redundant symbol of ','
+            if (propertyInfos.Last() == propertyInfo)
+            {
+                builder_front.Remove(builder_front.Length - 1, 1);
+            }
+        }
+
+        //SqlServer和Mysql的sql语句分别处理
+        if (SqlDbContext.DataBaseType == DataBaseType.SqlServer)
+        {
+            builder_front.Append(" FROM ");
+            builder_front.Append(SqlDbContext.TableName);
+            builder_front.Append(" ");
+            builder_front.Append(alias);
+        }
+
+        return SqlDbContext.SqlStatement = builder_front.Append($"{LambdaToSql.ConvertWhere(filter)}").ToString().TrimEnd();
     }
 
     public override string Delete<TEntity>(TEntity entity)
